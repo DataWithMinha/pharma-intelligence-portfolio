@@ -1,0 +1,14 @@
+USE Pharma_Intelligence;
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = N'RAW')
+    EXEC(N'CREATE SCHEMA RAW');
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = N'STG')
+    EXEC(N'CREATE SCHEMA STG');
+GO
+
+IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = N'DWH')
+    EXEC(N'CREATE SCHEMA DWH');
+GO

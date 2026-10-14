@@ -1,0 +1,81 @@
+USE Pharma_Intelligence;
+GO
+
+CREATE TABLE DWH.DIM_DATE (
+    DateID int NOT NULL PRIMARY KEY,
+    FullDate date NOT NULL UNIQUE,
+    CalendarYear smallint NOT NULL,
+    CalendarQuarter tinyint NOT NULL,
+    CalendarMonth tinyint NOT NULL,
+    MonthName nvarchar(20) NOT NULL,
+    CONSTRAINT CK_DIM_DATE_Quarter CHECK (CalendarQuarter BETWEEN 1 AND 4),
+    CONSTRAINT CK_DIM_DATE_Month CHECK (CalendarMonth BETWEEN 1 AND 12)
+);
+GO
+
+CREATE TABLE DWH.DIM_COMPANY (
+    CompanyID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    CompanyName nvarchar(500) NOT NULL UNIQUE,
+    CompanyType nvarchar(100) NULL,
+    IsActive bit NOT NULL CONSTRAINT DF_DIM_COMPANY_IsActive DEFAULT 1
+);
+GO
+
+CREATE TABLE DWH.DIM_THERAPEUTIC_AREA (
+    TherapeuticAreaID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    TherapeuticAreaName nvarchar(250) NOT NULL UNIQUE,
+    GrowthTier nvarchar(50) NULL
+);
+GO
+
+CREATE TABLE DWH.DIM_EVENT_TYPE (
+    EventTypeID tinyint NOT NULL PRIMARY KEY,
+    EventTypeName nvarchar(100) NOT NULL UNIQUE,
+    Description nvarchar(500) NULL
+);
+GO
+
+CREATE TABLE DWH.DIM_DRUG (
+    DrugID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    DrugName nvarchar(500) NOT NULL,
+    GenericName nvarchar(500) NULL,
+    TherapeuticAreaID int NOT NULL,
+    PrimaryCompanyID int NOT NULL,
+    IsActive bit NOT NULL CONSTRAINT DF_DIM_DRUG_IsActive DEFAULT 1,
+    CONSTRAINT UQ_DIM_DRUG_DrugName UNIQUE (DrugName),
+    CONSTRAINT FK_DIM_DRUG_THERAPEUTIC_AREA FOREIGN KEY (TherapeuticAreaID) REFERENCES DWH.DIM_THERAPEUTIC_AREA(TherapeuticAreaID),
+    CONSTRAINT FK_DIM_DRUG_PRIMARY_COMPANY FOREIGN KEY (PrimaryCompanyID) REFERENCES DWH.DIM_COMPANY(CompanyID)
+);
+GO
+
+CREATE TABLE DWH.FACT_DRUG_EVENTS (
+    EventID bigint IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    DrugID int NOT NULL,
+    DateID int NOT NULL,
+    EventTypeID tinyint NOT NULL,
+    TherapeuticAreaID int NOT NULL,
+    CompanyID int NULL,
+    EventStatus nvarchar(100) NULL,
+    EventName nvarchar(500) NOT NULL,
+    MetricValue decimal(19,4) NULL,
+    MetricUnit nvarchar(100) NULL,
+    ScoreValue decimal(9,4) NULL,
+    Geography nvarchar(100) NULL,
+    EventDescription nvarchar(max) NULL,
+    SourceSystem nvarchar(100) NOT NULL,
+    SourceID nvarchar(200) NOT NULL,
+    LoadedAt datetime2(0) NOT NULL CONSTRAINT DF_FACT_DRUG_EVENTS_LoadedAt DEFAULT SYSUTCDATETIME(),
+    CONSTRAINT UQ_FACT_DRUG_EVENTS_Source UNIQUE (SourceSystem, SourceID, DrugID, EventTypeID),
+    CONSTRAINT CK_FACT_DRUG_EVENTS_Score CHECK (ScoreValue IS NULL OR ScoreValue BETWEEN 0 AND 100),
+    CONSTRAINT FK_FACT_DRUG_EVENTS_DRUG FOREIGN KEY (DrugID) REFERENCES DWH.DIM_DRUG(DrugID),
+    CONSTRAINT FK_FACT_DRUG_EVENTS_DATE FOREIGN KEY (DateID) REFERENCES DWH.DIM_DATE(DateID),
+    CONSTRAINT FK_FACT_DRUG_EVENTS_EVENT_TYPE FOREIGN KEY (EventTypeID) REFERENCES DWH.DIM_EVENT_TYPE(EventTypeID),
+    CONSTRAINT FK_FACT_DRUG_EVENTS_THERAPEUTIC_AREA FOREIGN KEY (TherapeuticAreaID) REFERENCES DWH.DIM_THERAPEUTIC_AREA(TherapeuticAreaID),
+    CONSTRAINT FK_FACT_DRUG_EVENTS_COMPANY FOREIGN KEY (CompanyID) REFERENCES DWH.DIM_COMPANY(CompanyID)
+);
+GO
+
+CREATE INDEX IX_FACT_DRUG_EVENTS_DrugDate ON DWH.FACT_DRUG_EVENTS (DrugID, DateID);
+CREATE INDEX IX_FACT_DRUG_EVENTS_TypeArea ON DWH.FACT_DRUG_EVENTS (EventTypeID, TherapeuticAreaID);
+CREATE INDEX IX_FACT_DRUG_EVENTS_Company ON DWH.FACT_DRUG_EVENTS (CompanyID) WHERE CompanyID IS NOT NULL;
+GO

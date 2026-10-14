@@ -1,0 +1,31 @@
+# Source data and local extracts
+data/raw/
+data/processed/
+*.csv
+*.xlsx
+*.xls
+*.zip
+
+# Power BI local files and temporary artifacts
+*.pbix
+*.pbit
+*.tmp
+
+# SQL Server and local configuration
+*.bak
+*.mdf
+*.ldf
+.env
+local.settings.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Operating system and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
