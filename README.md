@@ -1,6 +1,6 @@
 # Pharma Intelligence Portfolio and Market Opportunity Analysis
 
-An end-to-end SQL Server and Power BI portfolio analytics project that combines public clinical-trial, FDA regulatory, Orange Book patent/exclusivity, and therapeutic-area market data. The solution turns source records into a validated analytics warehouse and dashboard-ready KPI layer for portfolio, market, clinical, regulatory, and IP-risk review.
+An end-to-end SQL Server portfolio analytics project that combines public clinical-trial, FDA regulatory, Orange Book patent/exclusivity, and therapeutic-area market data. The solution turns source records into a validated analytics warehouse and SQL KPI layer for portfolio, market, clinical, regulatory, and IP-risk review.
 
 > This is a portfolio project built from public data. It is a prioritisation aid, not legal, clinical, investment, or commercial advice.
 
@@ -28,7 +28,7 @@ STG schema        Typed, cleaned, standardised, deduplicated records
 DWH schema        Star-schema analytics model
         |
         v
-SQL KPI queries -> Power BI dashboard
+SQL KPI queries and analytical outputs
 ```
 
 The warehouse uses one central event fact table:
@@ -48,13 +48,12 @@ DIM_THERAPEUTIC_AREA -------|
 - Uses drug alias mapping to reconcile brand, generic, and formulation names across sources.
 - Includes data-quality validation for missing values, duplicates, date validity, and source-to-product matching.
 - Produces KPI queries for clinical pipeline, FDA regulatory activity, patent/exclusivity risk, market opportunity, and portfolio prioritisation.
-- Includes a Power BI reporting design with Executive Overview, Market & IP Risk, and Clinical & Regulatory Detail views.
+- Includes KPI queries for portfolio prioritisation and downstream reporting.
 
 ## Technology
 
 - SQL Server / T-SQL
 - SQL Server Management Studio
-- Power BI / DAX / Power Query
 - Excel / CSV source extracts
 - Python and Beautiful Soup for public HTML data extraction where applicable
 
@@ -63,9 +62,8 @@ DIM_THERAPEUTIC_AREA -------|
 ```text
 pharma-intelligence-portfolio/
 ├── sql/                 SQL Server build, load, validation, and KPI scripts
-├── docs/                Architecture, data dictionary, and dashboard guide
+├── docs/                Architecture, data dictionary, and runbook
 ├── data/                Dataset guidance; raw files are deliberately excluded
-├── powerbi/             Power BI publishing guidance
 ├── README.md
 └── .gitignore
 ```
@@ -78,7 +76,6 @@ pharma-intelligence-portfolio/
 4. Before running import/load scripts, update the local CSV paths to match your computer.
 5. Load only public source data into `RAW` tables.
 6. Run the STG, DWH, validation, and KPI scripts in order.
-7. Connect Power BI Desktop to the `DWH` tables and create the relationships described in [docs/power-bi-guide.md](docs/power-bi-guide.md).
 
 The complete order is documented in [docs/runbook.md](docs/runbook.md).
 
@@ -97,7 +94,7 @@ Weights are business assumptions and can be adjusted with stakeholder input.
 
 ## Data and privacy
 
-Raw source files, local import paths, Power BI credentials, and any non-public data are excluded from this repository. Use only public datasets and comply with each source's terms of use.
+Raw source files, local import paths, credentials, and any non-public data are excluded from this repository. Use only public datasets and comply with each source's terms of use.
 
 ## Author
 

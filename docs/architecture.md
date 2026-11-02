@@ -6,7 +6,7 @@
 |---|---|---|
 | `RAW` | Preserve source-shaped extracts | Keeps source values and lineage intact for auditability. |
 | `STG` | Clean and standardise records | Applies typing, date parsing, deduplication, and alias mapping. |
-| `DWH` | Support reporting and Power BI | Provides a star-schema model for consistent KPI analysis. |
+| `DWH` | Support analytical reporting | Provides a star-schema model for consistent KPI analysis. |
 
 ## Fact grain
 
