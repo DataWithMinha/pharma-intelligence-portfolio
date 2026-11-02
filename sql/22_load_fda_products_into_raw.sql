@@ -2,7 +2,8 @@ USE Pharma_Intelligence;
 GO
 
 BULK INSERT RAW.RAW_FDA_PRODUCTS
-FROM 'C:\Users\minha\Downloads\PHARMA INTEL\Products_filtered_final25_v2.csv'
+-- Update this example path before running the script.
+FROM 'C:\SQLImports\FDA\Products_filtered_final25_v2.csv'
 WITH (
     FORMAT = 'CSV',
     FIRSTROW = 2,

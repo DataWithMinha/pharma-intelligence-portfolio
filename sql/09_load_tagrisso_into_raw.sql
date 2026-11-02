@@ -4,7 +4,8 @@ GO
 -- Step 1: Load the untouched CSV into the source-shaped RAW import table.
 -- Run this on the same computer where SQL Server can read the file path.
 BULK INSERT RAW.IMPORT_CLINICAL_TRIAL
-FROM 'C:\Users\minha\Downloads\PHARMA INTEL\clinical_trials_tagrisso.csv'
+-- Update this example path before running the script.
+FROM 'C:\SQLImports\ClinicalTrials\clinical_trials_tagrisso.csv'
 WITH (
     FORMAT = 'CSV',
     FIRSTROW = 2,

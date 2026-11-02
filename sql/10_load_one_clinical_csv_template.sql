@@ -7,7 +7,7 @@ GO
 */
 
 DECLARE @FilePath nvarchar(4000) =
-    N'C:\Users\minha\Downloads\PHARMA INTEL\clinical_trials_imbruvica.csv';
+    N'C:\SQLImports\ClinicalTrials\clinical_trials_imbruvica.csv';
 
 DECLARE @SourceFileName nvarchar(260) =
     N'clinical_trials_imbruvica.csv';

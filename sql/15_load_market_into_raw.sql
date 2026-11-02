@@ -5,7 +5,8 @@ TRUNCATE TABLE RAW.IMPORT_MARKET;
 GO
 
 BULK INSERT RAW.IMPORT_MARKET
-FROM 'C:\Users\minha\Downloads\PHARMA INTEL\fact_market_events_real5areas.csv'
+-- Update this example path before running the script.
+FROM 'C:\SQLImports\Market\fact_market_events_real5areas.csv'
 WITH (
     FORMAT = 'CSV',
     FIRSTROW = 2,
